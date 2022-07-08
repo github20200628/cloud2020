@@ -24,7 +24,10 @@ import java.util.List;
 @Slf4j
 public class OrderController
 {
+    // 单机版生产者只有一个8001，这样写没问题。
 //    public static final String PAYMENT_URL = "http://localhost:8001";
+
+    // 集群版有两个生产者8001、8002，只有调用服务名称才能实现负载，而不能写死为8001。
     public static final String PAYMENT_URL = "http://CLOUD-PAYMENT-SERVICE";
 
     @Resource
@@ -80,7 +83,8 @@ public class OrderController
     @GetMapping("/consumer/payment/zipkin")
     public String paymentZipkin()
     {
-        String result = restTemplate.getForObject("http://localhost:8001"+"/payment/zipkin/", String.class);
+//        String result = restTemplate.getForObject("http://localhost:8001"+"/payment/zipkin/", String.class);
+        String result = restTemplate.getForObject(PAYMENT_URL+"/payment/zipkin/", String.class);
         return result;
     }
 }
